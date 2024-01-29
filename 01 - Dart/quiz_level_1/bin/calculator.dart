@@ -1,61 +1,132 @@
-import 'package:args/args.dart';
+import 'dart:io';
 
-const String version = '0.0.1';
-
-ArgParser buildParser() {
-  return ArgParser()
-    ..addFlag(
-      'help',
-      abbr: 'h',
-      negatable: false,
-      help: 'Print this usage information.',
-    )
-    ..addFlag(
-      'verbose',
-      abbr: 'v',
-      negatable: false,
-      help: 'Show additional command output.',
-    )
-    ..addFlag(
-      'version',
-      negatable: false,
-      help: 'Print the tool version.',
-    );
+void menu() {
+  print("\nKALKULATOR");
+  print("NIP: ARN202-35143");
+  print("\nMenu");
+  print("1. Penambahan");
+  print("2. Perkalian");
+  print("3. Konversi Kurs");
+  print("4. Hitung Body Mass Index (BMI)");
+  print("0. Keluar");
+  print("\nPilihan?");
 }
 
-void printUsage(ArgParser argParser) {
-  print('Usage: dart quiz_level_1.dart <flags> [arguments]');
-  print(argParser.usage);
-}
-
-void main(List<String> arguments) {
-  final ArgParser argParser = buildParser();
+void tambah() {
   try {
-    final ArgResults results = argParser.parse(arguments);
-    bool verbose = false;
+    print("Masukkan bilangan pertama:");
+    int? a = int.parse(stdin.readLineSync()!);
+    print("Masukkan bilangan kedua:");
+    int? b = int.parse(stdin.readLineSync()!);
 
-    // Process the parsed arguments.
-    if (results.wasParsed('help')) {
-      printUsage(argParser);
-      return;
-    }
-    if (results.wasParsed('version')) {
-      print('quiz_level_1 version: $version');
-      return;
-    }
-    if (results.wasParsed('verbose')) {
-      verbose = true;
-    }
+    print("\n==> Hasil jumlah $a + $b = ${a + b}");
+  } on Exception catch (e) {
+    print('Input harus bilangan genap!');
+    print('Exception: $e');
+  }
+}
 
-    // Act on the arguments provided.
-    print('Positional arguments: ${results.rest}');
-    if (verbose) {
-      print('[VERBOSE] All arguments: ${results.arguments}');
+void kali() {
+  try {
+    print("Masukkan bilangan pertama:");
+    double? a = double.parse(stdin.readLineSync()!);
+    print("Masukkan bilangan kedua:");
+    double? b = double.parse(stdin.readLineSync()!);
+
+    print("\n==> Hasil perkalian $a * $b = ${a * b}");
+  } on Exception catch (e) {
+    print('Input harus bilangan!');
+    print('Exception: $e');
+  }
+}
+
+void konversi() {
+  try {
+    print("1. IDR to USD");
+    print("2. USD to IDR");
+    print("Pilih jenis konversi:");
+    String? pilihan = stdin.readLineSync();
+
+    switch (pilihan) {
+      case "1":
+        print("\nMasukkan nominal IDR: ");
+        double? idr = double.parse(stdin.readLineSync()!);
+        double usd = (idr * 0.000063).toDouble();
+        print("==> Hasil konversi USD: \$$usd");
+        break;
+      case "2":
+        print("\nMasukkan nominal USD:");
+        double? usd = double.parse(stdin.readLineSync()!);
+        int idr = (usd * 15824.80).toInt();
+        print("==> Hasil konversi IDR: Rp $idr");
+        break;
+      default:
+        break;
     }
-  } on FormatException catch (e) {
-    // Print usage information if an invalid argument was provided.
-    print(e.message);
-    print('');
-    printUsage(argParser);
+  } on Exception catch (e) {
+    print('Input salah!');
+    print('Exception: $e');
+  }
+}
+
+extension Ex on double {
+  double toPrecision(int n) => double.parse(toStringAsFixed(n));
+}
+
+void bmi() {
+  try {
+    // print('Jenis kelamin L/P:');
+    // String? sex = stdin.readLineSync();
+
+    print('Berat badan (kg):');
+    double? bb = double.parse(stdin.readLineSync()!);
+
+    print('Tinggi badan (m):');
+    double? tb = double.parse(stdin.readLineSync()!);
+
+    double bmi = (bb / (tb * tb)).toPrecision(2);
+    print('\n==> BMI: $bmi');
+    if (bmi < 18.5) {
+      print('Berat badan kurang.');
+    } else if (bmi >= 18.5 && bmi <= 22.9) {
+      print('Berat badan normal.');
+    } else if (bmi >= 23 && bmi <= 29.9) {
+      print('Berat badan berlebih (cenderung obesitas).');
+    } else if (bmi >= 30) {
+      print('Obesitas');
+    }
+  } on Exception catch (e) {
+    print('Input salah!');
+  }
+}
+
+void main() {
+  bool active = true;
+  while (active == true) {
+    menu();
+    String? pilihan = stdin.readLineSync();
+
+    switch (pilihan) {
+      case '1':
+        print('\nMenu Penjumlahan');
+        tambah();
+        break;
+      case '2':
+        print('\nMenu Perkalian');
+        kali();
+        break;
+      case '3':
+        print('\nMenu Konversi');
+        konversi();
+        break;
+      case '4':
+        print('\nMenu BMI');
+        bmi();
+        break;
+      case '0':
+        active = false;
+      default:
+        break;
+    }
   }
 }
