@@ -134,7 +134,7 @@ class LoginView extends GetView<LoginController> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Image.asset("assets/icon/fb.png"),
+                    Image.asset("assets/icons/fb.png"),
                     const SizedBox(
                       width: 10,
                     ),
@@ -165,7 +165,7 @@ class LoginView extends GetView<LoginController> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Image.asset("assets/icon/google.png"),
+                    Image.asset("assets/icons/google.png"),
                     const SizedBox(
                       width: 10,
                     ),
